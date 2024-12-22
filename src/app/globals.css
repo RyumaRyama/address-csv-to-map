@@ -19,3 +19,9 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.leaflet-container {
+    width: 600px;
+    height: 300px;
+    margin: 10px;
+}
