@@ -18,7 +18,6 @@ const Map = (props) => {
     />
     {
       props.mapData.map((data) => {
-        console.log(data.point);
         return (
           <Marker position={[data.point.latitude, data.point.longitude]} key={[data.point.latitude, data.point.longitude]}>
             <Popup>
