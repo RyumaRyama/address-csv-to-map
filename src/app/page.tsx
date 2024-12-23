@@ -19,7 +19,7 @@ export default function Home() {
   const [pref, setPref] = useState<string>(PREF_OPTIONS[0]);
   const [searchText, setSearchText] = useState<string>("");
 
-  const maxPin = 50;
+  const maxPin = 20;
 
   const updateMapData = () => {
     const reader = new FileReader();
