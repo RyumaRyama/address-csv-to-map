@@ -15,29 +15,9 @@ type MapData = {
 
 export default function Home() {
   const [mapData, setMapData] = useState<MapData[]>([]);
-  const updateMapData = () => {
-    const mapData: MapData[] = [
-      {
-        name: "Tokyo",
-        point: {
-          longitude: 139.6917,
-          latitude: 35.6895,
-        },
-      },
-      {
-        name: "Osaka",
-        point: {
-          longitude: 135.5022,
-          latitude: 34.6937,
-        },
-      },
-    ];
-    setMapData(mapData);
-  };
+  const [file, setFile] = useState<File | null>(null);
 
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const file = e.target.files[0];
+  const updateMapData = () => {
     const reader = new FileReader();
     reader.onload = async (e) => {
       if (!e.target) return;
@@ -70,7 +50,13 @@ export default function Home() {
         setMapData(fetchMapData);
       });
     };
+    if (!file) return;
     reader.readAsText(file);
+  };
+
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    setFile(e.target.files[0]);
   };
 
   return (
@@ -88,6 +74,13 @@ export default function Home() {
             ))}
           </select>
           <input className="w-30 p-2 m-2 text border"></input>
+          <button
+            type="button"
+            className="focus:outline-none text-white bg-green-700 hover:bg-green-800 rounded-lg text-sm px-5 m-3 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+            onClick={updateMapData}
+          >
+            検索
+          </button>
         </div>
         <div className="flex justify-center">
           <input
@@ -97,17 +90,19 @@ export default function Home() {
             onChange={handleFile}
           >
           </input>
-          <button
-            type="button"
-            className="focus:outline-none text-white bg-green-700 hover:bg-green-800 rounded-lg text-sm px-5 m-4 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-            onClick={updateMapData}
-          >
-            決定
-          </button>
         </div>
       </div>
       <div className="flex justify-center">
         <MapComponent mapData={mapData} />
+      </div>
+      <div className="m-5">
+        <h2>ジオコーディングについて</h2>
+        <a
+          className="text-blue-500"
+          href="https://geocode.csis.u-tokyo.ac.jp"
+        >
+          CSISシンプルジオコーディング実験を利用
+        </a>
       </div>
     </>
   );
