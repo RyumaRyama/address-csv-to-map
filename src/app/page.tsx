@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import PREF_OPTIONS from "@/components/prefectures";
 import { MapComponent } from "../components/MapComponent/index";
 import { parse } from 'papaparse';
@@ -16,6 +16,10 @@ type MapData = {
 export default function Home() {
   const [mapData, setMapData] = useState<MapData[]>([]);
   const [file, setFile] = useState<File | null>(null);
+  const [pref, setPref] = useState<string>(PREF_OPTIONS[0]);
+  const [searchText, setSearchText] = useState<string>("");
+
+  const maxPin = 50;
 
   const updateMapData = () => {
     const reader = new FileReader();
@@ -26,7 +30,11 @@ export default function Home() {
 
       const fetchMapData: MapData[] = [];
 
-      Promise.all(csv_data.data.slice(0, 50).map(async (result) => {
+      const filtedData = csv_data.data.filter((result) => {
+        return result[1].includes(pref) && result[1].includes(searchText);
+      });
+
+      Promise.all(filtedData.slice(0, maxPin).map(async (result) => {
         const name = result[0];
         const address = result[1];
 
@@ -54,6 +62,19 @@ export default function Home() {
     reader.readAsText(file);
   };
 
+  const handleSearchButton = () => {
+    updateMapData();
+    console.log(searchText);
+  }
+
+  const handlePrefSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setPref(e.target.value);
+  };
+
+  const handleSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+  }
+
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     setFile(e.target.files[0]);
@@ -66,18 +87,24 @@ export default function Home() {
           <h1 className="text-2xl mt-5 mb-3">CSV to MAP</h1>
         </div>
         <div className="flex justify-center">
-          <select className="w-30 p-2 m-2 border">
-            {PREF_OPTIONS().map((pref, index) => (
+          <select
+            className="w-30 p-2 m-2 border"
+            onChange={handlePrefSelect}
+          >
+            {PREF_OPTIONS.map((pref, index) => (
               <option key={index} value={pref}>
                 {pref}
               </option>
             ))}
           </select>
-          <input className="w-30 p-2 m-2 text border"></input>
+          <input
+            className="w-30 p-2 m-2 text border"
+            onChange={handleSearchText}
+          />
           <button
             type="button"
             className="focus:outline-none text-white bg-green-700 hover:bg-green-800 rounded-lg text-sm px-5 m-3 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-            onClick={updateMapData}
+            onClick={handleSearchButton}
           >
             検索
           </button>
@@ -88,8 +115,7 @@ export default function Home() {
             accept="text/csv"
             className="w-30 p-2 m-2"
             onChange={handleFile}
-          >
-          </input>
+          />
         </div>
       </div>
       <div className="flex justify-center">
