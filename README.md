@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CSV to MAP
+
+住所と名称一覧のCSVファイルから、地図上にピンを打つNext.jsアプリケーションです。
 
 ## Getting Started
 
@@ -20,17 +22,37 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## CSVフォーマット
+ヘッダーは無し、`名称, 住所`の順。
 
-To learn more about Next.js, take a look at the following resources:
+サンプル用愛知県コメダ珈琲一部店舗の住所一覧
+```csv‘
+本店,愛知県名古屋市瑞穂区上山町３ー１４ー８
+高岳店,愛知県名古屋市東区泉２ー２１ー３
+松風店,愛知県名古屋市昭和区松風町１−７
+上前津店,愛知県名古屋市中区大須３−３１−４２
+東郊通店,愛知県名古屋市昭和区御器所１−３−１
+五女子店,愛知県名古屋市中川区露橋２−２５−１５
+刈谷店,愛知県刈谷市井ヶ谷町天白１９−４
+本町店,愛知県名古屋市中区大須２−５−１３
+新栄店,愛知県名古屋市中区新栄１ー１７ー１
+平和店,愛知県名古屋市中区平和１−１０−１０コスモパレス
+庄内通店,愛知県名古屋市西区庄内通４−１庄内ハイツ
+浦里店,愛知県名古屋市緑区浦里１−１６０グランドハイツ浦里
+児玉店,愛知県名古屋市西区児玉町３ー５ー１０
+法華店,愛知県名古屋市中川区法華西町１−１３
+野並店,愛知県名古屋市天白区井の森２３２−１アイコービル１Ｆ
+中割店,愛知県名古屋市南区中割町３−１２０−１
+山手店,愛知県名古屋市昭和区山手通４ー１５ペポ山手ビル２Ｆ
+港店,愛知県名古屋市港区名港２−９−２７ポートプラザビル１Ｆ
+城北店,愛知県名古屋市北区八代町２−１０−２
+豊田梅坪店,愛知県豊田市梅坪町１−１８−１
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## マップについて
+[Leafret](https://leafletjs.com/)を使用。
+マップ画像は[OpenStreetMap](https://www.openstreetmap.org/copyright)を使用。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## ジオコーディングについて
+[CSISシンプルジオコーディング実験を利用](https://geocode.csis.u-tokyo.ac.jp/)
+アクセス数増大防止のため、アプリケーション内では一度で処理する件数を制限しています。
